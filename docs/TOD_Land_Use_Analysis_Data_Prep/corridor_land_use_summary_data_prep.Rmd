@@ -1,0 +1,94 @@
+---
+title: "Lakeland TOD Target Analysis"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+require(tidyverse)
+require(sf)
+require(areal)
+require(ggplot2)
+require(rpgcolorsr)
+require(gridExtra)
+require(kableExtra)
+require(ggrepel)
+require(tmap)
+require(rmapshaper)
+library(scales)
+
+options(scipen = 999)
+
+#devtools::install_github("BFroebRPG/rpgcolorsr")
+
+```
+
+
+```{r read in data}
+
+#set projection variable to Virginia state plane
+crs <- 2237
+
+#read in zone data Shapefile
+zones <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\Model\\tpo_2045_forecast\\2045 Forecast\\Polk_SE_Forecast_2045.shp") %>% 
+  st_transform(crs) %>% 
+  st_make_valid()
+
+#read in station points Shapefile
+station_points <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\lakeland_proposed_stations_v2.shp") %>% 
+  st_transform(crs)
+
+parcels <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\Parcles_2019\\Parcels_2019_StudyArea_wAttributes.shp") %>% 
+  st_transform(crs)
+
+corridor <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\R_TOD_Analysis\\R_TOD_Readiness_Tool_Ananlysis\\study_corridor_10142020\\study_corridor.shp") %>% 
+  st_transform(crs)
+
+#buffer station points
+station_buffers <- st_buffer(station_points, 
+                             2640)
+
+corridor_buffer_half <- st_buffer(corridor, 
+                             2640)
+
+corridor_buffer_mile <- st_buffer(corridor, 
+                             5280)
+
+
+landuse <- st_read("K:\\Projects\\Florida\\Features\\LU\\StateWideLU_FDEP\\StateWideLU.gdb", "StatewideLU")
+
+landuse_water <- landuse %>% 
+  filter(LEVEL1_LANDUSE_DESCRIPTION == "Water") %>% 
+  st_filter(., zones, .predicate = st_intersects) %>% 
+  select() %>% 
+  st_make_valid()
+
+```
+
+```{r add density to zones}
+
+#any(is.na(st_dimension(zones)))
+#any(is.na(st_is_valid(zones)))
+
+zones_land <- st_difference(zones, st_union(landuse_water)) 
+
+zones_land$geometry[175] <- st_collection_extract(zones_land$geometry[175], "POLYGON") %>% 
+  st_combine %>% 
+  st_cast(.,"MULTIPOLYGON")
+```
+
+```{r write data}
+
+write_rds(zones_land, "K:\\Projects\\OrangeCoNC\\Features\\R\\data\\zones_land.rds")
+
+write_rds(corridor, "K:\\Projects\\OrangeCoNC\\Features\\R\\data\\corridor.rds")
+
+write_rds(station_buffers, "K:\\Projects\\OrangeCoNC\\Features\\R\\data\\station_buffers.rds")
+
+write_rds(station_points, "K:\\Projects\\OrangeCoNC\\Features\\R\\data\\station_points.rds")
+
+write_rds(corridor_buffer_half, "K:\\Projects\\OrangeCoNC\\Features\\R\\data\\corridor_buffer_half.rds")
+
+```

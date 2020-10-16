@@ -363,6 +363,9 @@ div.tocify {
 <li>
   <a href="county_growth.html">County Growth Analysis</a>
 </li>
+<li>
+  <a href="corridor_station_area_growth.html">Corridor &amp; Station Area Growth Analysis</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -380,19 +383,26 @@ div.tocify {
 </div>
 
 
-<pre class="r"><code>knitr::opts_chunk$set(echo = FALSE, message = FALSE, echo = FALSE)
-
-zones_land &lt;- read_rds(&quot;K:\\Projects\\OrangeCoNC\\Features\\R\\data\\zones_land.rds&quot;)
-
-corridor &lt;- read_rds(&quot;K:\\Projects\\OrangeCoNC\\Features\\R\\data\\corridor.rds&quot;)
-
-station_buffers &lt;- read_rds(&quot;K:\\Projects\\OrangeCoNC\\Features\\R\\data\\station_buffers.rds&quot;)
-
-corridor_buffer_half &lt;- read_rds(&quot;K:\\Projects\\OrangeCoNC\\Features\\R\\data\\corridor_buffer_half.rds&quot;)
-
-station_points &lt;- read_rds(&quot;K:\\Projects\\OrangeCoNC\\Features\\R\\data\\station_points.rds&quot;)</code></pre>
-<p><img src="corridor_station_area_growth_files/figure-html/plot%20station%20area%20benchmarks-1.png" width="672" /><img src="corridor_station_area_growth_files/figure-html/plot%20station%20area%20benchmarks-2.png" width="672" /></p>
-<p><img src="corridor_station_area_growth_files/figure-html/plot%20corridor%20benchmarks-1.png" width="672" /><img src="corridor_station_area_growth_files/figure-html/plot%20corridor%20benchmarks-2.png" width="672" /></p>
+<div id="corridor-and-station-area-densities-relative-to-fdot-brt-benchmarks" class="section level1">
+<h1>Corridor and Station Area Densities Relative to FDOT BRT Benchmarks</h1>
+<div id="corridor-dwelling-unit-density" class="section level2">
+<h2>Corridor Dwelling Unit Density</h2>
+<p><img src="corridor_station_area_growth_files/figure-html/plot%20corridor%20DU%20relative%20to%20benchmark-1.png" width="672" /></p>
+</div>
+<div id="corridor-employment-density" class="section level2">
+<h2>Corridor Employment Density</h2>
+<p><img src="corridor_station_area_growth_files/figure-html/plot%20corridor%20EMP%20relative%20to%20benchmark-1.png" width="672" /></p>
+</div>
+<div id="station-area-dwelling-unit-density" class="section level2">
+<h2>Station Area Dwelling Unit Density</h2>
+<p><img src="corridor_station_area_growth_files/figure-html/plot%20station%20area%20DU%20density-1.png" width="672" /></p>
+</div>
+<div id="station-area-employment-density" class="section level2">
+<h2>Station Area Employment Density</h2>
+<p><img src="corridor_station_area_growth_files/figure-html/plot%20station%20area%20EMP%20density-1.png" width="672" /></p>
+</div>
+<div id="portion-of-growth" class="section level2">
+<h2>Portion of Growth</h2>
 <pre><code>## [1] 26367.9</code></pre>
 <pre><code>## [1] 0.1494253</code></pre>
 <pre><code>## [1] 0.4464759</code></pre>
@@ -402,6 +412,8 @@ station_points &lt;- read_rds(&quot;K:\\Projects\\OrangeCoNC\\Features\\R\\data\
 <pre><code>## Warning: Removed 17 rows containing missing values (geom_point).</code></pre>
 <pre><code>## Warning: Removed 845 rows containing missing values (geom_segment).</code></pre>
 <p><img src="corridor_station_area_growth_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+</div>
 
 
 

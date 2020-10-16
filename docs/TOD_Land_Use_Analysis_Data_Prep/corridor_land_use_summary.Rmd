@@ -1,0 +1,430 @@
+---
+title: "Lakeland TOD Target Analysis"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+require(tidyverse)
+require(sf)
+require(areal)
+require(ggplot2)
+require(rpgcolorsr)
+require(gridExtra)
+require(kableExtra)
+require(ggrepel)
+require(tmap)
+require(rmapshaper)
+library(scales)
+
+options(scipen = 999)
+
+#devtools::install_github("BFroebRPG/rpgcolorsr")
+
+```
+
+
+```{r read in data}
+
+#set projection variable to Virginia state plane
+crs <- 2237
+
+#read in zone data Shapefile
+zones <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\Model\\tpo_2045_forecast\\2045 Forecast\\Polk_SE_Forecast_2045.shp") %>% 
+  st_transform(crs) %>% 
+  st_make_valid()
+
+#read in station points Shapefile
+station_points <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\lakeland_proposed_stations_v2.shp") %>% 
+  st_transform(crs)
+
+parcels <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\Parcles_2019\\Parcels_2019_StudyArea_wAttributes.shp") %>% 
+  st_transform(crs)
+
+corridor <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\R_TOD_Analysis\\R_TOD_Readiness_Tool_Ananlysis\\study_corridor_10142020\\study_corridor.shp") %>% 
+  st_transform(crs)
+
+#buffer station points
+station_buffers <- st_buffer(station_points, 
+                             2640)
+
+corridor_buffer_half <- st_buffer(corridor, 
+                             2640)
+
+corridor_buffer_mile <- st_buffer(corridor, 
+                             5280)
+
+
+landuse <- st_read("K:\\Projects\\Florida\\Features\\LU\\StateWideLU_FDEP\\StateWideLU.gdb", "StatewideLU")
+
+landuse_water <- landuse %>% 
+  filter(LEVEL1_LANDUSE_DESCRIPTION == "Water") %>% 
+  st_filter(., zones, .predicate = st_intersects) %>% 
+  select() %>% 
+  st_make_valid()
+
+```
+
+```{r add density to zones}
+
+#any(is.na(st_dimension(zones)))
+#any(is.na(st_is_valid(zones)))
+
+zones_land <- st_difference(zones, st_union(landuse_water)) 
+
+zones_land$geometry[175] <- st_collection_extract(zones_land$geometry[175], "POLYGON") %>% 
+  st_combine %>% 
+  st_cast(.,"MULTIPOLYGON")
+
+
+
+```
+
+
+```{r map data}
+
+tmap_mode("view")
+
+zones_land_mapping <- zones_land %>% 
+  mutate(acres = as.numeric(st_area(.)/43560),
+         au_density_45 = (Tot_POP_45 + TotEmp2045) / acres,
+         au_growth_density_20_45 = ((Tot_POP_45+TotEmp2045)-(Tot_POP_20+TotEmp2045))/acres) %>% 
+  ms_simplify()
+
+%>% 
+  select(TAZ, acres, au_density_45, au_growth_density_20_45)
+
+```
+
+
+```{r map base density}
+
+tm_shape(zones_land_mapping) + 
+  tm_fill("au_growth_density_20_45", n = 7, style = "jenks") + 
+  tm_borders(lwd = 0.5) +
+  tm_shape(station_points) + tm_dots(col = "#8400a8") +
+  tm_shape(corridor_buffer_half) + tm_borders(col = "#8400a8")
+```
+
+
+```{r calcuate area weighted values for all variables at station area}
+
+#do area weighted calculations for station areas
+
+area_weighted_station_results_DU <- aw_interpolate(station_buffers, 
+                                        cartodb_id, 
+                                        zones_land, 
+                                        TAZ, 
+                                        weight = "total", 
+                                        output = "sf", 
+                                        extensive = c("Tot_DU_15", "Tot_DU_20", "Tot_DU_25", "Tot_DU_30", "Tot_DU_35", "Tot_DU_40", "Tot_DU_45")) %>% 
+  select(-cartodb_id, -descriptio)
+
+area_weighted_station_results_DU <- area_weighted_station_results_DU %>% 
+  mutate(acres = as.numeric(st_area(.))/43560) %>% 
+  st_drop_geometry()
+
+area_weighted_station_results_DU_density <- area_weighted_station_results_DU
+  
+area_weighted_station_results_DU_density[2:8] <- lapply(area_weighted_station_results_DU_density[2:8], `/`, area_weighted_station_results_DU_density$acres)
+
+area_weighted_station_results_DU_density$acres <- NULL
+
+area_weighted_station_results_DU_longer <- pivot_longer(area_weighted_station_results_DU_density, !name, names_to = "year", values_to = "DU")
+  
+area_weighted_station_results_DU_longer$year <- str_remove_all(area_weighted_station_results_DU_longer$year, "Tot_DU_")
+
+area_weighted_station_results_DU_longer$year <- paste0("20", area_weighted_station_results_DU_longer$year)
+
+area_weighted_station_results_EMP <- aw_interpolate(station_buffers, 
+                                        cartodb_id, 
+                                        zones_land, 
+                                        TAZ, 
+                                        weight = "total", 
+                                        output = "sf", 
+                                        extensive = c("TotEmp2015",  "TotEmp2020",  "TotEmp2025",  "TotEmp2030",  "TotEmp2035", "TotEmp2040",  "TotEmp2045")) %>% 
+  select(-cartodb_id, -descriptio)
+
+area_weighted_station_results_EMP <- area_weighted_station_results_EMP %>% 
+  mutate(acres = as.numeric(st_area(.))/43560) %>% 
+  st_drop_geometry()
+
+area_weighted_station_results_EMP_density <- area_weighted_station_results_EMP
+  
+area_weighted_station_results_EMP_density[2:8] <- lapply(area_weighted_station_results_EMP_density[2:8], `/`, area_weighted_station_results_EMP_density$acres)
+
+area_weighted_station_results_EMP_density$acres <- NULL
+
+area_weighted_station_results_EMP_longer <- pivot_longer(area_weighted_station_results_EMP_density, !name, names_to = "year", values_to = "EMP")
+  
+area_weighted_station_results_EMP_longer$year <- str_remove_all(area_weighted_station_results_EMP_longer$year, "TotEmp")
+
+
+
+```
+
+
+
+```{r calcuate area weighted values for all variables at corridor}
+
+area_weighted_corridor_results_DU <- aw_interpolate(corridor_buffer_half, 
+                                        cartodb_id, 
+                                        zones_land, 
+                                        TAZ, 
+                                        weight = "total", 
+                                        output = "sf", 
+                                        extensive = c("Tot_DU_15", "Tot_DU_20", "Tot_DU_25", "Tot_DU_30", "Tot_DU_35", "Tot_DU_40", "Tot_DU_45")) %>% 
+  select(-cartodb_id, -id)
+
+area_weighted_corridor_results_DU <- area_weighted_corridor_results_DU %>% 
+  mutate(acres = as.numeric(st_area(.))/43560) %>% 
+  st_drop_geometry()
+
+area_weighted_corridor_results_DU_density <- area_weighted_corridor_results_DU
+  
+area_weighted_corridor_results_DU_density[1:7] <- lapply(area_weighted_corridor_results_DU_density[1:7], `/`, area_weighted_corridor_results_DU_density$acres)
+
+area_weighted_corridor_results_DU_density$acres <- NULL
+
+area_weighted_corridor_results_DU_longer <- pivot_longer(area_weighted_corridor_results_DU_density, colnames(area_weighted_corridor_results_DU_density), values_to = "DU", names_to = "year")
+  
+area_weighted_corridor_results_DU_longer$year <- str_remove_all(area_weighted_corridor_results_DU_longer$year, "Tot_DU_")
+
+area_weighted_corridor_results_DU_longer$year <- paste0("20", area_weighted_corridor_results_DU_longer$year)
+
+#DU Density
+
+area_weighted_corridor_results_EMP <- aw_interpolate(corridor_buffer_half, 
+                                        cartodb_id, 
+                                        zones_land, 
+                                        TAZ, 
+                                        weight = "total", 
+                                        output = "sf", 
+                                        extensive = c("TotEmp2015",  "TotEmp2020",  "TotEmp2025",  "TotEmp2030",  "TotEmp2035", "TotEmp2040",  "TotEmp2045")) %>% 
+  select(-cartodb_id, -id)
+
+area_weighted_corridor_results_EMP <- area_weighted_corridor_results_EMP %>% 
+  mutate(acres = as.numeric(st_area(.))/43560) %>% 
+  st_drop_geometry()
+
+area_weighted_corridor_results_EMP_density <- area_weighted_corridor_results_EMP
+  
+area_weighted_corridor_results_EMP_density[1:7] <- lapply(area_weighted_corridor_results_EMP_density[1:7], `/`, area_weighted_corridor_results_EMP_density$acres)
+
+area_weighted_corridor_results_EMP_density$acres <- NULL
+
+area_weighted_corridor_results_EMP_longer <- pivot_longer(area_weighted_corridor_results_EMP_density, colnames(area_weighted_corridor_results_EMP_density), values_to = "EMP", names_to = "year")
+  
+area_weighted_corridor_results_EMP_longer$year <- str_remove_all(area_weighted_corridor_results_EMP_longer$year, "TotEmp")
+
+
+```
+
+
+```{r plot station area benchmarks}
+
+ggplot(area_weighted_station_results_DU_longer, aes(y=DU, x=year)) + 
+    geom_bar(position="dodge", stat="identity", fill = "#F29C20") +
+    geom_hline(yintercept=7, linetype="dashed", size = 1, color = "purple") +
+    annotate(geom="text", label="FDOT TOD Framework Targets (BRT) - Neighborhood Range (Min.)", x=3, y=7, vjust=2, color = "purple") +
+  labs( title = "Corridor Dwelling Unit Density by Year") +
+  xlab("Year") + 
+  ylab("Dwelling Units/Acre") +theme_bw() +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 17))
+
+
+ggplot(area_weighted_corridor_results_EMP_longer, aes(y=EMP, x=year)) + 
+    geom_bar(position="dodge", stat="identity", fill = "#3fbfba") +
+    scale_fill_rpg(palette = "additional") +
+     geom_hline(yintercept=13, linetype="dashed", size = 1, color = "purple") +
+    annotate(geom="text", label="FDOT TOD Framework Targets (BRT) - Neighborhood Range (Min.)", x=3, y=13, vjust=2, color = "purple")  +
+  labs( title = "Corridor Employment Density by Year") +
+  xlab("Year") + 
+  ylab("Employees/Acre") + theme_bw() +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 17))
+
+
+```
+
+```{r plot corridor benchmarks}
+
+
+ggplot(area_weighted_station_results_DU_longer, aes(fill=year, y=DU, x=name)) + 
+    geom_bar(position="dodge", stat="identity") +
+    scale_fill_rpg(palette = "logo") +
+    geom_hline(yintercept=7, linetype="dashed", size = 1, color = "purple") +
+    annotate(geom="text", label="FDOT TOD Framework Targets (BRT) - Neighborhood Range (Min.)", x=3, y=7, vjust=2, color = "purple") +
+  labs( title = "Dwelling Unit Density by Station Area") +
+  xlab("Station Area") + 
+  ylab("Dwelling Units/Acre") +theme_bw() +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 17))
+
+
+ggplot(area_weighted_station_results_EMP_longer, aes(fill=year, y=EMP, x=name)) + 
+    geom_bar(position="dodge", stat="identity") +
+    scale_fill_rpg(palette = "logo") +
+     geom_hline(yintercept=13, linetype="dashed", size = 1, color = "purple") +
+    annotate(geom="text", label="FDOT TOD Framework Targets (BRT) - Neighborhood Range (Min.)", x=3, y=13, vjust=2, color = "purple")  +
+  labs( title = "Dwelling Unit Density by Station Area") +
+  xlab("Station Area") + 
+  ylab("Employees/Acre") + theme_bw() +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 17))
+
+
+```
+
+
+
+```{r}
+
+#Emp growth foretasted in corridor
+corridor_emp_growth <- area_weighted_corridor_results_EMP$TotEmp2045-area_weighted_corridor_results_EMP$TotEmp2020
+
+#additional emp growth needed to hit target of 13 du/acre
+(area_weighted_corridor_results_EMP$acres*13)-(area_weighted_corridor_results_EMP$TotEmp2045)
+
+#corridor Emp growth rate
+(area_weighted_corridor_results_EMP$TotEmp2045-area_weighted_corridor_results_EMP$TotEmp2020)/area_weighted_corridor_results_EMP$TotEmp2020
+
+#county Emp growth
+county_emp_growth <- sum(zones_land$TotEmp2045)-sum(zones_land$TotEmp2020)
+
+#county Emp growth rate
+(sum(zones_land$TotEmp2045)-sum(zones_land$TotEmp2020))/sum(zones_land$TotEmp2020)
+
+#growth of corridor to hit target
+corridor_growth_target_scenario <- (area_weighted_corridor_results_EMP$acres*13)-(area_weighted_corridor_results_EMP$TotEmp2020)
+
+#growth rate of corridor if it hit target
+((area_weighted_corridor_results_EMP$acres*13)-(area_weighted_corridor_results_EMP$TotEmp2020))/area_weighted_corridor_results_EMP$TotEmp2020
+
+#portion of growth corridor is forecasted to absorb
+
+corridor_emp_growth/county_emp_growth
+
+corridor_growth_target_scenario/county_emp_growth
+
+```
+
+```{r}
+
+zones_growth <- zones_land %>% 
+  st_drop_geometry() %>% 
+  mutate(EMP_rate = (TotEmp2045-TotEmp2020)/TotEmp2020,
+                     POP_rate = (Tot_POP_45-Tot_POP_20)/Tot_POP_20) %>% 
+  select(TAZ, EMP_rate, POP_rate) %>% 
+  arrange(EMP_rate)
+
+
+ggplot(zones_growth, aes(x=TAZ, y=EMP_rate)) + 
+  geom_point(col="tomato2", size=3) +   # Draw points
+  geom_segment(aes(x=TAZ, 
+                   xend=TAZ, 
+                   y=min(EMP_rate), 
+                   yend=max(EMP_rate)), 
+               linetype="dashed", 
+               size=0.1) +   # Draw dashed lines
+  labs(title="Dot Plot", 
+       subtitle="Make Vs Avg. Mileage") +
+  coord_flip()
+
+```
+
+
+
+
+```{r echo = FALSE, eval = FALSE}
+
+#Export to Excel
+library(readr)
+write_excel_csv(area_weighted_station_results, "D:\\Users\\GA7\\Desktop\\Book5.xlsx", na = "NA", append = TRUE,
+  col_names = !append, delim = ",", quote_escape = "double")
+
+write_csv(area_weighted_station_results, "D:\\Users\\GA7\\Desktop\\Book5.xlsx", na = "NA", append = FALSE, quote_escape = "double")
+
+```
+
+
+
+
+```{r echo = FALSE, results='asis', fig.width = 8, fig.align='center'}
+
+for (i in 1:9) {
+  cat("  \n### ",  station_buffers$STATION_NA[i], "Station Area\n") 
+  cat("  \n \n#### ", "Inputs and Intersected TAZs\n") 
+  tmp_TAZs <- st_filter(zones_with_se, station_buffers[i,], predicate = st_intersects)
+  tmp_datainputs <- ggplot(tmp_TAZs) +
+  geom_sf(data = tmp_TAZs, aes(color = "A" ), fill = "transparent", lwd = 1) + 
+  geom_sf(data = station_buffers[i,], aes(color = "TAZ"), fill = "transparent", lwd = 1.2) +
+  ggtitle("Station Area with TAZs") +
+  scale_color_manual(values = c("A" = "#3D9998", "TAZ" = "#FFAA00"), 
+                     labels = c("TAZ", "Station Area"),
+                     name = NULL) +
+    geom_label_repel(aes(label = paste0("TAZ ", TAZ), geometry = geometry),
+    stat = "sf_coordinates",
+    min.segment.length = 0,
+    label.size = NA, 
+    color = "#3E4D54",
+    size = 2) +
+  theme(plot.title = element_text(color = "#3E4D54"), legend.text = element_text(color = "#3E4D54"), legend.position="bottom", axis.title.x = element_blank(), axis.title.y = element_blank())
+
+
+  #step1
+  tmp_intersect <- aw_intersect(station_buffers[i,], zones_with_se, areaVar)
+  
+  tmp_step1 <- ggplot(tmp_intersect) +
+  geom_sf(data = tmp_intersect, aes(color = "Intersect" ), fill = "transparent", lwd = 1) +
+  ggtitle("Intersected TAZs") +
+  scale_color_manual(values = c("Intersect" = "#3D9998"), 
+                     name = NULL) +
+      geom_label_repel(aes(label = paste0("TAZ ", TAZ, " intersect"), geometry = geometry),
+    stat = "sf_coordinates",
+    min.segment.length = 0,
+    label.size = NA, 
+    color = "#3E4D54",
+    size = 2) +
+  theme(plot.title = element_text(color = "#3E4D54"), legend.text = element_text(color = "#3E4D54"), legend.position="bottom", axis.title.x = element_blank(), axis.title.y = element_blank())
+  
+    grid.arrange(tmp_datainputs, tmp_step1, ncol=2)
+
+  
+  #step2
+  tmp_total_area <- aw_total(tmp_intersect, zones_with_se, TAZ, areaVar, totalVar, weight = "total", type = "extensive")
+
+  #step3
+  tmp_total_weight <- aw_weight(tmp_total_area, areaVar, totalVar, areaWeight)
+  
+  #step4
+  tmp_total_calculate <- aw_calculate(tmp_total_weight, Population_2017, areaWeight, WeightedUnits)
+
+
+empty <- c(" ", " ")
+print(kable(empty, col.names = " "))
+  
+cat("  \n####",  station_buffers$STATION_NA[i], "Station Area Inputs and Weights \n")
+
+  print(kable(select(st_drop_geometry(tmp_total_calculate), TAZ, Employ_2017, Employ_2040, HHs_2017, HHs_2040, Population_2017, Population_2040, areaVar, totalVar, areaWeight), col.names = c("Intersected TAZ", "TAZ Employment\n2017", "TAZ Employment\n2040", "TAZ Households\n2017", "TAZ Households\n2040", "TAZ Population\n2017", "TAZ Population\n2040", "TAZ TAZ Area\n(sq. ft.)", "Intersect Area (sq. ft.)", "Intersect Weight")) %>% 
+  kable_styling(bootstrap_options = "striped", full_width = F, latex_options="scale_down"))
+
+  #step5
+ 
+    tmp_area_weighted_station_results <- aw_interpolate(station_buffers[i,], 
+                                        OBJECTID, 
+                                        zones_with_se, 
+                                        TAZ, 
+                                        weight = "total", 
+                                        output = "sf", 
+                                        extensive = c("Population_2017", "Population_2040", "HHs_2017", "HHs_2040", "Employ_2017", "Employ_2040"))
+ 
+cat("  \n#### ",  station_buffers$STATION_NA[i], "Interpolated Results  \n")
+       
+    
+    print(kable(select(st_drop_geometry(tmp_area_weighted_station_results), STATION_NA, Employ_2017, Employ_2040, HHs_2017, HHs_2040, Population_2017, Population_2040), col.names = c("Station Name", "Interpolated\nEmployment 2017", "Interpolated\nEmployment 2040", "Interpolated\nHouseholds 2017", "Interpolated\nHouseholds 2040", "Interpolated\nPopulation 2017", "Interpolated\nPopulation 2040")) %>% 
+  kable_styling(bootstrap_options = "striped", full_width = F, latex_options="scale_down"))
+
+cat('\\pagebreak')
+}
+
+```
