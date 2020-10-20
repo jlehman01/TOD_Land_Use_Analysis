@@ -1,0 +1,22 @@
+---
+title: "Potential Next Steps"
+editor_options: 
+  chunk_output_type: console
+---
+
+# Potential Project Next Steps
+* Refine station locations
+* Adjust corridor to include downtown intermodal site, perhaps adding 1 alternate route
+* Compare MPO land use data for base year to ACS/Census for reasonableness check
+* Complete documentation on this site, perhaps adding technical documentation page
+* Potentially add page describing TOD thresholds and include graphics from FDOT report
+* Potentially incorporate output from TOD Readiness application, which in some respects provides more comprehensive station evaluation
+
+# Potential Methadology Enhancements
+* Enhance disaggregation methodology (using parcel or building footprint data)
+* Add additional indicators contained in TOD guidebook (jobs-housing)
+* Complete documentation on this site
+* Improve graphics and potentially make them interactive
+
+
+![TOD Guidebook Neighborhood Center Targets](NeighborhoodCenterBRT.JPG)
