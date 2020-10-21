@@ -26,4 +26,11 @@ editor_options:
 ![TCRP 187 Mean Values](tcrp187.PNG)
 
 ## DRPT Multimodal Design Guidelines 
-![DRPT Multimodal Design Guidelines](DRPT.PNG)
+![DRPT Multimodal Design Guidlines](DRPT.PNG)
+
+DRPT definition: Express bus services are offered in several areas of high demand, including the
+Richmond Highway Express operating between Fort Belvoir along the Richmond Highway
+to the Eisenhower and King Street Metrorail stops connecting to Washington, DC, and a
+service that operates in the Dulles Corridor with connections to Metrorail. Similarly,
+express routes operated by Hampton Roads Transit utilize high occupancy vehicle (HOV)
+lanes in the congested Norfolk downtown and Naval Station areas.
