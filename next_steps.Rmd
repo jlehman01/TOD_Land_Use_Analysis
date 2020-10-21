@@ -6,6 +6,7 @@ editor_options:
 
 # Project
 * Refine station locations
+* Refine thresholds used in plots
 * Adjust corridor to include downtown intermodal site, perhaps adding 1 alternate route
 * Compare MPO land use data for base year to ACS/Census for reasonableness check
 * Complete documentation on this site, perhaps adding technical documentation page
@@ -23,3 +24,6 @@ editor_options:
 
 ## TCRP 187 Mean Values
 ![TCRP 187 Mean Values](tcrp187.PNG)
+
+## DRPT Multimodal Design Guidelines 
+![DRPT Multimodal Design Guidelines](DRPT.PNG)
