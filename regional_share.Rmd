@@ -62,7 +62,7 @@ growth_scenarios_emp[2,2] <- "outside corridor"
 growth_scenarios_emp[2,3] <- "model scenario" 
 
 #growth of corridor to hit target
-corridor_growth_emp_target_scenario <- (area_weighted_corridor_results_EMP$acres*13)-(area_weighted_corridor_results_EMP$TotEmp2020)
+corridor_growth_emp_target_scenario <- (area_weighted_corridor_results_EMP$acres*10)-(area_weighted_corridor_results_EMP$TotEmp2020)
 
 growth_scenarios_emp[3,1] <- corridor_growth_emp_target_scenario
 growth_scenarios_emp[3,2] <- "inside corridor" 
@@ -102,7 +102,7 @@ growth_scenarios_du[2,2] <- "outside corridor"
 growth_scenarios_du[2,3] <- "model scenario" 
 
 #growth of corridor to hit target
-corridor_growth_du_target_scenario <- (area_weighted_corridor_results_DU$acres*13)-(area_weighted_corridor_results_DU$Tot_DU_20)
+corridor_growth_du_target_scenario <- (area_weighted_corridor_results_DU$acres*7)-(area_weighted_corridor_results_DU$Tot_DU_20)
 
 growth_scenarios_du[3,1] <- corridor_growth_du_target_scenario
 growth_scenarios_du[3,2] <- "inside corridor" 
