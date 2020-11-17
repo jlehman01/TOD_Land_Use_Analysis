@@ -30,15 +30,18 @@ options(scipen = 999)
 ```{r read in data}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, echo = FALSE)
 
-zones_land <- read_rds("K:\\Projects\\OrangeCoNC\\Features\\R\\data\\zones_land.rds")
+zones_land <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\zones_land.rds")
 
-corridor <- read_rds("K:\\Projects\\OrangeCoNC\\Features\\R\\data\\corridor.rds")
+corrido <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\corridor.rds")
 
-station_buffers <- read_rds("K:\\Projects\\OrangeCoNC\\Features\\R\\data\\station_buffers.rds")
+station_buffers <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\station_buffers.rds")
 
-corridor_buffer_half <- read_rds("K:\\Projects\\OrangeCoNC\\Features\\R\\data\\corridor_buffer_half.rds")
+station_points <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\station_points.rds")
 
-station_points <- read_rds("K:\\Projects\\OrangeCoNC\\Features\\R\\data\\station_points.rds")
+corridor_buffer_half <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\corridor_buffer_half.rds")
+
+#corridor_parcels <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\corridor_parcels.rds")
+
 ```
 
 The following charts reveal the distribution of forecasted dwelling unit and employment growth between the corridor and non-corridor area under the 2045 land use scenario. They reveal the share of regional growth expected to occur inside and outside the corridor. A "target" scenario was developed to reveal what the growth distributions would look like if enough of the expected regional growth was concentrated in the corridor in order to reach minimum BRT density targets for jobs and dwelling units.

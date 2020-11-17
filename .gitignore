@@ -39,14 +39,7 @@ vignettes/*.pdf
 .Renviron
 
 # basic scripts
-index.Rmd
-.Renviron
-_site.yml
-build_site.R
-corridor_station_area_growth.Rmd
-county_growth.Rmd
-index.Rmd
-R_Model_Target_Analysis.Rproj
-theme.css
-/TOD_Land_Use_Analysis_Data_Prep/
-next_steps.Rmd
+/*
+!.gitignore
+!docs/
+docs/TOD_Land_Use_Analysis_Data_Prep
