@@ -32,18 +32,17 @@ options(scipen = 999)
 crs <- 2237
 
 #read in zone data Shapefile
-zones <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\Model\\tpo_2045_forecast\\2045 Forecast\\Polk_SE_Forecast_2045.shp") %>% 
-  st_transform(crs) %>% 
+zones <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\Model\\tpo_2045_forecast\\2045 Forecast\\Polk_SE_Forecast_2045.shp") %>%   st_transform(crs) %>% 
   st_make_valid()
 
 #read in station points Shapefile
-station_points <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\lakeland_proposed_stations_v2.shp") %>% 
+station_points <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\lakeland_proposed_stations_v3.shp") %>% 
   st_transform(crs)
 
 parcels <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\Parcles_2019\\Parcels_2019_StudyArea_wAttributes.shp") %>% 
   st_transform(crs)
 
-corridor <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\R_TOD_Analysis\\R_TOD_Readiness_Tool_Ananlysis\\study_corridor_10142020\\study_corridor.shp") %>% 
+corridor <- st_read("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\study_corridor_v3.shp") %>% 
   st_transform(crs)
 
 #buffer station points
@@ -79,16 +78,25 @@ zones_land$geometry[175] <- st_collection_extract(zones_land$geometry[175], "POL
   st_cast(.,"MULTIPOLYGON")
 ```
 
+```{r select parcels that intersect with corridor}
+
+corridor_parcels <- st_filter(parcels, corridor_buffer_half, .predicate = st_intersects)
+
+```
+
+
 ```{r write data}
 
-write_rds(zones_land, "K:\\Projects\\OrangeCoNC\\Features\\R\\data\\zones_land.rds")
+write_rds(zones_land, "K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\zones_land.rds")
 
-write_rds(corridor, "K:\\Projects\\OrangeCoNC\\Features\\R\\data\\corridor.rds")
+write_rds(corridor, "K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\corridor.rds")
 
-write_rds(station_buffers, "K:\\Projects\\OrangeCoNC\\Features\\R\\data\\station_buffers.rds")
+write_rds(station_buffers, "K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\station_buffers.rds")
 
-write_rds(station_points, "K:\\Projects\\OrangeCoNC\\Features\\R\\data\\station_points.rds")
+write_rds(station_points, "K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\station_points.rds")
 
-write_rds(corridor_buffer_half, "K:\\Projects\\OrangeCoNC\\Features\\R\\data\\corridor_buffer_half.rds")
+write_rds(corridor_buffer_half, "K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\corridor_buffer_half.rds")
+
+write_rds(corridor_parcels, "K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\corridor_parcels.rds")
 
 ```
