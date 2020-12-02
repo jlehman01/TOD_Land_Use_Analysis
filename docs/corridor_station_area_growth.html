@@ -11,7 +11,7 @@
 
 
 
-<title>Density Analysis</title>
+<title>Trend Scenario</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -354,7 +354,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Lakeland TOD Target Analysis [DRAFT]</a>
+      <a class="navbar-brand" href="index.html">Lakeland TOD Scenario Analysis [DRAFT]</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -362,13 +362,13 @@ div.tocify {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="county_growth.html">Land Use Mapping</a>
+  <a href="county_growth.html">Land Use Scenario Mapping</a>
 </li>
 <li>
-  <a href="corridor_station_area_growth.html">Density Analysis</a>
+  <a href="corridor_station_area_growth.html">Scenario Charts &amp; Tables</a>
 </li>
 <li>
-  <a href="regional_share.html">Regional Share Analysis</a>
+  <a href="regional_share.html">Scenario Regional Share Analysis</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -382,19 +382,19 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Density Analysis</h1>
+<h1 class="title toc-ignore">Trend Scenario</h1>
 
 </div>
 
 
 <p>The following series of charts display anticipated employment and dwelling unit densities by year in Polk County, as contained in the <a href="https://polktpo.com/what-we-do/our-planning-documents/2045-long-range-transportation-plan">Polk TPO 2045 LRTP Land Use Forecast</a>. These plots reveal how the exiting and future year densities compare to minimum BRT thresholds in <a href="http://www.sfrpc.com/TOD/citiesthatwork-289dd1/Documents/OtherResources/FrameworkTOD_0715.pdf">“A Framework for Transit Oriented Development in Florida.”</a> In addition, mean corridor typology values from <a href="https://www.nap.edu/catalog/23630/livable-transit-corridors-methods-metrics-and-strategies">“TCRP 187: Livable Transit Corridors: Methods, Metrics, Strategies”</a>, and <a href="http://www.drpt.virginia.gov/media/1056/guide-for-preparing-a-multimodal-system-plan.pdf">“DRPT Multimodal Design Guidelines”</a> are included for the employment charts. Similar values are not avaialbe for dwelling unit figures, as TCRP 187 uses population as a metric.</p>
-<p>Methadology note: jobs and dwelling units were estimated using a area-weighted interpolation process, which assumes jobs and housing are equally spread across each TAZ. Densities were calculated using land area for each TAZ, which was calculated by removing all area in each TAZ designated as water by FDEP. This method can be enhanced to account for buildign size, type, or other information that can improve the disaggregation.</p>
+<p>Methodology note: jobs and dwelling units were estimated using a area-weighted interpolation process, which assumes jobs and housing are equally spread across each TAZ. Densities were calculated using land area for each TAZ, which was calculated by removing all area in each TAZ designated as water by FDEP. This method can be enhanced to account for building size, type, or other information that can improve the disaggregation.</p>
 <div id="corridor-dwelling-unit-density" class="section level2">
 <h2>Corridor Dwelling Unit Density</h2>
-<p><img src="corridor_station_area_growth_files/figure-html/plot%20corridor%20DU%20relative%20to%20benchmark-1.png" width="768" /></p>
+<p><img src="corridor_station_area_growth_files/figure-html/plot%20trend%20corridor%20DU%20relative%20to%20benchmark-1.png" width="768" /></p>
 </div>
-<div id="corridor-employment-density" class="section level2">
-<h2>Corridor Employment Density</h2>
+<div id="corridor-employment-density-by-scenario" class="section level2">
+<h2>Corridor Employment Density by Scenario</h2>
 <p><img src="corridor_station_area_growth_files/figure-html/plot%20corridor%20EMP%20relative%20to%20benchmark-1.png" width="768" /></p>
 </div>
 <div id="station-area-dwelling-unit-density" class="section level2">
@@ -402,14 +402,13 @@ div.tocify {
 <p><img src="corridor_station_area_growth_files/figure-html/plot%20station%20area%20DU%20density-1.png" width="768" /></p>
 <div id="table-of-dwelling-unit-density-values-by-station-area" class="section level3">
 <h3>Table of Dwelling Unit Density Values by Station Area</h3>
+<div id="trend-scenario" class="section level4">
+<h4>Trend Scenario</h4>
 <table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:left;">
 name
-</th>
-<th style="text-align:right;">
-Tot_DU_15
 </th>
 <th style="text-align:right;">
 Tot_DU_20
@@ -437,9 +436,6 @@ Tot_DU_45
 Lakeland Intermodal Center - Downtown West Site
 </td>
 <td style="text-align:right;">
-0.62
-</td>
-<td style="text-align:right;">
 0.81
 </td>
 <td style="text-align:right;">
@@ -461,9 +457,6 @@ Lakeland Intermodal Center - Downtown West Site
 <tr>
 <td style="text-align:left;">
 Lakeland Square
-</td>
-<td style="text-align:right;">
-1.80
 </td>
 <td style="text-align:right;">
 1.93
@@ -489,9 +482,6 @@ Lakeland Square
 Bella Vista St
 </td>
 <td style="text-align:right;">
-1.68
-</td>
-<td style="text-align:right;">
 1.74
 </td>
 <td style="text-align:right;">
@@ -513,9 +503,6 @@ Bella Vista St
 <tr>
 <td style="text-align:left;">
 Crevasse Street
-</td>
-<td style="text-align:right;">
-2.09
 </td>
 <td style="text-align:right;">
 2.20
@@ -541,9 +528,6 @@ Crevasse Street
 Parkview Place
 </td>
 <td style="text-align:right;">
-2.26
-</td>
-<td style="text-align:right;">
 2.40
 </td>
 <td style="text-align:right;">
@@ -567,9 +551,6 @@ Parkview Place
 North Massachussetts Ave.
 </td>
 <td style="text-align:right;">
-2.12
-</td>
-<td style="text-align:right;">
 2.36
 </td>
 <td style="text-align:right;">
@@ -591,8 +572,8 @@ North Massachussetts Ave.
 </tbody>
 </table>
 </div>
-<div id="table-of-dwelling-units-by-station-area" class="section level3">
-<h3>Table of Dwelling Units by Station Area</h3>
+<div id="tod-scenario" class="section level4">
+<h4>TOD Scenario</h4>
 <table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -600,7 +581,177 @@ North Massachussetts Ave.
 name
 </th>
 <th style="text-align:right;">
-Tot_DU_15
+tod_du_20_final
+</th>
+<th style="text-align:right;">
+tod_du_25_final
+</th>
+<th style="text-align:right;">
+tod_du_30_final
+</th>
+<th style="text-align:right;">
+tod_du_35_final
+</th>
+<th style="text-align:right;">
+tod_du_40_final
+</th>
+<th style="text-align:right;">
+tod_du_45_final
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Lakeland Intermodal Center - Downtown West Site
+</td>
+<td style="text-align:right;">
+0.81
+</td>
+<td style="text-align:right;">
+1.55
+</td>
+<td style="text-align:right;">
+2.43
+</td>
+<td style="text-align:right;">
+3.38
+</td>
+<td style="text-align:right;">
+4.42
+</td>
+<td style="text-align:right;">
+5.60
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lakeland Square
+</td>
+<td style="text-align:right;">
+1.93
+</td>
+<td style="text-align:right;">
+2.47
+</td>
+<td style="text-align:right;">
+3.05
+</td>
+<td style="text-align:right;">
+3.64
+</td>
+<td style="text-align:right;">
+4.29
+</td>
+<td style="text-align:right;">
+5.06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bella Vista St
+</td>
+<td style="text-align:right;">
+1.74
+</td>
+<td style="text-align:right;">
+2.01
+</td>
+<td style="text-align:right;">
+2.30
+</td>
+<td style="text-align:right;">
+2.62
+</td>
+<td style="text-align:right;">
+2.96
+</td>
+<td style="text-align:right;">
+3.34
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Crevasse Street
+</td>
+<td style="text-align:right;">
+2.20
+</td>
+<td style="text-align:right;">
+2.50
+</td>
+<td style="text-align:right;">
+2.82
+</td>
+<td style="text-align:right;">
+3.15
+</td>
+<td style="text-align:right;">
+3.52
+</td>
+<td style="text-align:right;">
+3.94
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Parkview Place
+</td>
+<td style="text-align:right;">
+2.40
+</td>
+<td style="text-align:right;">
+2.61
+</td>
+<td style="text-align:right;">
+2.85
+</td>
+<td style="text-align:right;">
+3.10
+</td>
+<td style="text-align:right;">
+3.38
+</td>
+<td style="text-align:right;">
+3.70
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+North Massachussetts Ave.
+</td>
+<td style="text-align:right;">
+2.36
+</td>
+<td style="text-align:right;">
+3.36
+</td>
+<td style="text-align:right;">
+3.72
+</td>
+<td style="text-align:right;">
+4.12
+</td>
+<td style="text-align:right;">
+4.55
+</td>
+<td style="text-align:right;">
+5.04
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="table-of-dwelling-units-by-station-area" class="section level3">
+<h3>Table of Dwelling Units by Station Area</h3>
+<div id="trend-scenario-1" class="section level4">
+<h4>Trend Scenario</h4>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+name
 </th>
 <th style="text-align:right;">
 Tot_DU_20
@@ -631,28 +782,25 @@ acres
 Lakeland Intermodal Center - Downtown West Site
 </td>
 <td style="text-align:right;">
-309.19
+405
 </td>
 <td style="text-align:right;">
-405.44
+498
 </td>
 <td style="text-align:right;">
-497.51
+605
 </td>
 <td style="text-align:right;">
-604.72
+721
 </td>
 <td style="text-align:right;">
-721.23
+850
 </td>
 <td style="text-align:right;">
-850.16
+995
 </td>
 <td style="text-align:right;">
-995.08
-</td>
-<td style="text-align:right;">
-502.43
+502
 </td>
 </tr>
 <tr>
@@ -660,28 +808,25 @@ Lakeland Intermodal Center - Downtown West Site
 Lakeland Square
 </td>
 <td style="text-align:right;">
-902.09
+968
 </td>
 <td style="text-align:right;">
-967.98
+1003
 </td>
 <td style="text-align:right;">
-1002.99
+1041
 </td>
 <td style="text-align:right;">
-1040.73
+1079
 </td>
 <td style="text-align:right;">
-1078.68
+1121
 </td>
 <td style="text-align:right;">
-1121.00
+1171
 </td>
 <td style="text-align:right;">
-1170.52
-</td>
-<td style="text-align:right;">
-502.43
+502
 </td>
 </tr>
 <tr>
@@ -689,28 +834,25 @@ Lakeland Square
 Bella Vista St
 </td>
 <td style="text-align:right;">
-845.13
+872
 </td>
 <td style="text-align:right;">
-871.98
+900
 </td>
 <td style="text-align:right;">
-900.10
+930
 </td>
 <td style="text-align:right;">
-929.81
+962
 </td>
 <td style="text-align:right;">
-961.65
+996
 </td>
 <td style="text-align:right;">
-995.95
+1035
 </td>
 <td style="text-align:right;">
-1035.45
-</td>
-<td style="text-align:right;">
-502.43
+502
 </td>
 </tr>
 <tr>
@@ -718,28 +860,25 @@ Bella Vista St
 Crevasse Street
 </td>
 <td style="text-align:right;">
-1048.58
+1107
 </td>
 <td style="text-align:right;">
-1106.96
+1158
 </td>
 <td style="text-align:right;">
-1158.17
+1215
 </td>
 <td style="text-align:right;">
-1214.69
+1274
 </td>
 <td style="text-align:right;">
-1273.86
+1340
 </td>
 <td style="text-align:right;">
-1339.81
+1416
 </td>
 <td style="text-align:right;">
-1415.61
-</td>
-<td style="text-align:right;">
-502.43
+502
 </td>
 </tr>
 <tr>
@@ -747,28 +886,25 @@ Crevasse Street
 Parkview Place
 </td>
 <td style="text-align:right;">
-1135.10
+1204
 </td>
 <td style="text-align:right;">
-1203.96
+1274
 </td>
 <td style="text-align:right;">
-1273.68
+1351
 </td>
 <td style="text-align:right;">
-1351.07
+1433
 </td>
 <td style="text-align:right;">
-1432.58
+1524
 </td>
 <td style="text-align:right;">
-1524.32
+1628
 </td>
 <td style="text-align:right;">
-1627.50
-</td>
-<td style="text-align:right;">
-502.43
+502
 </td>
 </tr>
 <tr>
@@ -776,32 +912,221 @@ Parkview Place
 North Massachussetts Ave.
 </td>
 <td style="text-align:right;">
-1062.64
+1186
 </td>
 <td style="text-align:right;">
-1186.03
+1634
 </td>
 <td style="text-align:right;">
-1633.74
+1757
 </td>
 <td style="text-align:right;">
-1756.72
+1889
 </td>
 <td style="text-align:right;">
-1889.06
+2036
 </td>
 <td style="text-align:right;">
-2035.83
+2201
 </td>
 <td style="text-align:right;">
-2200.90
-</td>
-<td style="text-align:right;">
-502.43
+502
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="tod-scenario-1" class="section level4">
+<h4>TOD Scenario</h4>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:right;">
+tod_du_20_final
+</th>
+<th style="text-align:right;">
+tod_du_25_final
+</th>
+<th style="text-align:right;">
+tod_du_30_final
+</th>
+<th style="text-align:right;">
+tod_du_35_final
+</th>
+<th style="text-align:right;">
+tod_du_40_final
+</th>
+<th style="text-align:right;">
+tod_du_45_final
+</th>
+<th style="text-align:right;">
+acres
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Lakeland Intermodal Center - Downtown West Site
+</td>
+<td style="text-align:right;">
+405
+</td>
+<td style="text-align:right;">
+781
+</td>
+<td style="text-align:right;">
+1218
+</td>
+<td style="text-align:right;">
+1696
+</td>
+<td style="text-align:right;">
+2222
+</td>
+<td style="text-align:right;">
+2812
+</td>
+<td style="text-align:right;">
+502
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lakeland Square
+</td>
+<td style="text-align:right;">
+968
+</td>
+<td style="text-align:right;">
+1239
+</td>
+<td style="text-align:right;">
+1532
+</td>
+<td style="text-align:right;">
+1827
+</td>
+<td style="text-align:right;">
+2156
+</td>
+<td style="text-align:right;">
+2540
+</td>
+<td style="text-align:right;">
+502
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bella Vista St
+</td>
+<td style="text-align:right;">
+872
+</td>
+<td style="text-align:right;">
+1010
+</td>
+<td style="text-align:right;">
+1157
+</td>
+<td style="text-align:right;">
+1315
+</td>
+<td style="text-align:right;">
+1485
+</td>
+<td style="text-align:right;">
+1680
+</td>
+<td style="text-align:right;">
+502
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Crevasse Street
+</td>
+<td style="text-align:right;">
+1107
+</td>
+<td style="text-align:right;">
+1254
+</td>
+<td style="text-align:right;">
+1415
+</td>
+<td style="text-align:right;">
+1582
+</td>
+<td style="text-align:right;">
+1766
+</td>
+<td style="text-align:right;">
+1981
+</td>
+<td style="text-align:right;">
+502
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Parkview Place
+</td>
+<td style="text-align:right;">
+1204
+</td>
+<td style="text-align:right;">
+1313
+</td>
+<td style="text-align:right;">
+1432
+</td>
+<td style="text-align:right;">
+1559
+</td>
+<td style="text-align:right;">
+1699
+</td>
+<td style="text-align:right;">
+1858
+</td>
+<td style="text-align:right;">
+502
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+North Massachussetts Ave.
+</td>
+<td style="text-align:right;">
+1186
+</td>
+<td style="text-align:right;">
+1687
+</td>
+<td style="text-align:right;">
+1868
+</td>
+<td style="text-align:right;">
+2068
+</td>
+<td style="text-align:right;">
+2288
+</td>
+<td style="text-align:right;">
+2533
+</td>
+<td style="text-align:right;">
+502
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <div id="station-area-employment-density" class="section level2">
@@ -814,9 +1139,6 @@ North Massachussetts Ave.
 <tr>
 <th style="text-align:left;">
 name
-</th>
-<th style="text-align:right;">
-TotEmp2015
 </th>
 <th style="text-align:right;">
 TotEmp2020
@@ -844,9 +1166,6 @@ TotEmp2045
 Lakeland Intermodal Center - Downtown West Site
 </td>
 <td style="text-align:right;">
-7.80
-</td>
-<td style="text-align:right;">
 7.85
 </td>
 <td style="text-align:right;">
@@ -868,9 +1187,6 @@ Lakeland Intermodal Center - Downtown West Site
 <tr>
 <td style="text-align:left;">
 Lakeland Square
-</td>
-<td style="text-align:right;">
-3.88
 </td>
 <td style="text-align:right;">
 3.89
@@ -896,9 +1212,6 @@ Lakeland Square
 Bella Vista St
 </td>
 <td style="text-align:right;">
-4.73
-</td>
-<td style="text-align:right;">
 4.91
 </td>
 <td style="text-align:right;">
@@ -920,9 +1233,6 @@ Bella Vista St
 <tr>
 <td style="text-align:left;">
 Crevasse Street
-</td>
-<td style="text-align:right;">
-2.43
 </td>
 <td style="text-align:right;">
 2.52
@@ -948,9 +1258,6 @@ Crevasse Street
 Parkview Place
 </td>
 <td style="text-align:right;">
-7.80
-</td>
-<td style="text-align:right;">
 7.89
 </td>
 <td style="text-align:right;">
@@ -972,9 +1279,6 @@ Parkview Place
 <tr>
 <td style="text-align:left;">
 North Massachussetts Ave.
-</td>
-<td style="text-align:right;">
-8.20
 </td>
 <td style="text-align:right;">
 8.23
@@ -1007,9 +1311,6 @@ North Massachussetts Ave.
 name
 </th>
 <th style="text-align:right;">
-TotEmp2015
-</th>
-<th style="text-align:right;">
 TotEmp2020
 </th>
 <th style="text-align:right;">
@@ -1038,28 +1339,25 @@ acres
 Lakeland Intermodal Center - Downtown West Site
 </td>
 <td style="text-align:right;">
-3917.09
+3944
 </td>
 <td style="text-align:right;">
-3943.92
+3958
 </td>
 <td style="text-align:right;">
-3957.87
+4069
 </td>
 <td style="text-align:right;">
-4069.18
+4325
 </td>
 <td style="text-align:right;">
-4325.14
+4478
 </td>
 <td style="text-align:right;">
-4477.56
+4480
 </td>
 <td style="text-align:right;">
-4479.76
-</td>
-<td style="text-align:right;">
-502.43
+502
 </td>
 </tr>
 <tr>
@@ -1067,28 +1365,25 @@ Lakeland Intermodal Center - Downtown West Site
 Lakeland Square
 </td>
 <td style="text-align:right;">
-1947.20
+1957
 </td>
 <td style="text-align:right;">
-1956.63
+1961
 </td>
 <td style="text-align:right;">
-1961.29
+1966
 </td>
 <td style="text-align:right;">
-1966.49
+1971
 </td>
 <td style="text-align:right;">
-1970.97
+1975
 </td>
 <td style="text-align:right;">
-1975.33
+1979
 </td>
 <td style="text-align:right;">
-1979.35
-</td>
-<td style="text-align:right;">
-502.43
+502
 </td>
 </tr>
 <tr>
@@ -1096,28 +1391,25 @@ Lakeland Square
 Bella Vista St
 </td>
 <td style="text-align:right;">
-2374.51
+2469
 </td>
 <td style="text-align:right;">
-2469.19
+2774
 </td>
 <td style="text-align:right;">
-2774.34
+3072
 </td>
 <td style="text-align:right;">
-3072.18
+3395
 </td>
 <td style="text-align:right;">
-3394.86
+3828
 </td>
 <td style="text-align:right;">
-3827.65
+4152
 </td>
 <td style="text-align:right;">
-4152.29
-</td>
-<td style="text-align:right;">
-502.43
+502
 </td>
 </tr>
 <tr>
@@ -1125,28 +1417,25 @@ Bella Vista St
 Crevasse Street
 </td>
 <td style="text-align:right;">
-1220.87
+1268
 </td>
 <td style="text-align:right;">
-1268.03
+1288
 </td>
 <td style="text-align:right;">
-1288.11
+1309
 </td>
 <td style="text-align:right;">
-1308.84
+1325
 </td>
 <td style="text-align:right;">
-1325.47
+1340
 </td>
 <td style="text-align:right;">
-1340.48
+1354
 </td>
 <td style="text-align:right;">
-1353.78
-</td>
-<td style="text-align:right;">
-502.43
+502
 </td>
 </tr>
 <tr>
@@ -1154,28 +1443,25 @@ Crevasse Street
 Parkview Place
 </td>
 <td style="text-align:right;">
-3917.85
+3965
 </td>
 <td style="text-align:right;">
-3964.65
+4067
 </td>
 <td style="text-align:right;">
-4067.02
+4165
 </td>
 <td style="text-align:right;">
-4164.73
+4465
 </td>
 <td style="text-align:right;">
-4465.38
+4599
 </td>
 <td style="text-align:right;">
-4599.34
+4697
 </td>
 <td style="text-align:right;">
-4697.18
-</td>
-<td style="text-align:right;">
-502.43
+502
 </td>
 </tr>
 <tr>
@@ -1183,37 +1469,30 @@ Parkview Place
 North Massachussetts Ave.
 </td>
 <td style="text-align:right;">
-4120.22
+4133
 </td>
 <td style="text-align:right;">
-4133.26
+4137
 </td>
 <td style="text-align:right;">
-4137.42
+4206
 </td>
 <td style="text-align:right;">
-4205.66
+4404
 </td>
 <td style="text-align:right;">
-4404.33
+4530
 </td>
 <td style="text-align:right;">
-4530.33
+4589
 </td>
 <td style="text-align:right;">
-4588.64
-</td>
-<td style="text-align:right;">
-502.43
+502
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-<div id="station-area-activity-unit-popemp-density" class="section level2">
-<h2>Station Area Activity Unit (POP+EMP) Density</h2>
-<p><img src="corridor_station_area_growth_files/figure-html/plot%20station%20area%20POPEMP%20density-1.png" width="768" /></p>
 </div>
 
 
