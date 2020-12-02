@@ -5,7 +5,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, echo = FALSE, cache = TRUE, fig.width = 8)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, echo = FALSE, warning = FALSE, cache = TRUE)
 
 require(tidyverse)
 require(sf)
@@ -18,7 +18,6 @@ require(ggrepel)
 require(tmap)
 require(rmapshaper)
 library(scales)
-library(gridExtra)
 
 options(scipen = 999)
 
@@ -26,13 +25,11 @@ options(scipen = 999)
 
 ```
 
-
 ```{r read in data}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, echo = FALSE)
 
 zones_land <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\zones_land.rds")
 
-corrido <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\corridor.rds")
+corridor <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\corridor.rds")
 
 station_buffers <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\station_buffers.rds")
 
@@ -40,44 +37,31 @@ station_points <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98
 
 corridor_buffer_half <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\corridor_buffer_half.rds")
 
+tod_scenario <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\tod_scenario.rds")
+
+station_buffers_no_overlap <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\station_buffers_no_overlap.rds")
+
 #corridor_parcels <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\corridor_parcels.rds")
+
+corridor_area_weighted_combined <- readRDS("K:\\Projects\\D1\\Features\\Lakeland_AAA_Phase3\\US98\\TOD_Land_Use_Analysis\\area_weighted_corridor_combined.rds")
 
 ```
 
-The following charts reveal the distribution of forecasted dwelling unit and employment growth between the corridor and non-corridor area under the 2045 land use scenario. They reveal the share of regional growth expected to occur inside and outside the corridor. A "target" scenario was developed to reveal what the growth distributions would look like if enough of the expected regional growth was concentrated in the corridor in order to reach minimum BRT density targets for jobs and dwelling units.
+The following charts reveal the distribution of forecasted dwelling unit and employment growth occurring inside and outside the corridor by both land use scenarios. They reveal the increase in regional growth the corridor would need to absorb.
+
+
+```{r calculate growth for each category}
+
+area_weighted_summary_wider <- corridor_area_weighted_combined %>% pivot_wider(names_from = year, values_from = count, names_prefix = "yr_") %>% 
+  mutate(growth = yr_2045-yr_2020)
+
+```
+
+
 
 ```{r}
 
-growth_scenarios_emp <- data.frame()
-
-#Emp growth foretasted in corridor
-growth_scenarios_emp[1,1] <- area_weighted_corridor_results_EMP$TotEmp2045-area_weighted_corridor_results_EMP$TotEmp2020
-growth_scenarios_emp[1,2] <- "inside corridor" 
-growth_scenarios_emp[1,3] <- "model scenario" 
-
-
-#county and corridor growth foretasted in model
-county_growth_emp <- sum(zones_land$TotEmp2045)-sum(zones_land$TotEmp2020)
-corridor_emp_growth_model <- area_weighted_corridor_results_EMP$TotEmp2045-area_weighted_corridor_results_EMP$TotEmp2020
-
-growth_scenarios_emp[2,1] <- county_growth_emp - corridor_emp_growth_model
-growth_scenarios_emp[2,2] <- "outside corridor" 
-growth_scenarios_emp[2,3] <- "model scenario" 
-
-#growth of corridor to hit target
-corridor_growth_emp_target_scenario <- (area_weighted_corridor_results_EMP$acres*10)-(area_weighted_corridor_results_EMP$TotEmp2020)
-
-growth_scenarios_emp[3,1] <- corridor_growth_emp_target_scenario
-growth_scenarios_emp[3,2] <- "inside corridor" 
-growth_scenarios_emp[3,3] <- "target scenario" 
-
-growth_scenarios_emp[4,1] <- (county_growth_emp - corridor_growth_emp_target_scenario)
-growth_scenarios_emp[4,2] <- "outside corridor" 
-growth_scenarios_emp[4,3] <- "target scenario" 
-
-colnames(growth_scenarios_emp) <- c("employment", "area", "scenario")
-
-gg_emp_growth <- ggplot(data=growth_scenarios_emp, aes(x=scenario, y=employment, fill=area)) +
+gg_emp_growth <- ggplot(data=filter(area_weighted_summary_wider, type == "emp"), aes(x=scenario, y=growth, fill=area)) +
   geom_bar(stat="identity") +
   scale_fill_rpg(palette = "rpg_colors") +
   xlab("") +
@@ -86,44 +70,14 @@ gg_emp_growth <- ggplot(data=growth_scenarios_emp, aes(x=scenario, y=employment,
   scale_x_discrete(labels = function(x) str_wrap(x, width = 10))
 
 
-#pop growth scenario evaluation
-
-growth_scenarios_du <- data.frame()
-
-#Emp growth foretasted in corridor
-growth_scenarios_du[1,1] <- area_weighted_corridor_results_DU$Tot_DU_45-area_weighted_corridor_results_DU$Tot_DU_20
-growth_scenarios_du[1,2] <- "inside corridor" 
-growth_scenarios_du[1,3] <- "model scenario" 
-
-
-#county and corridor growth foretasted in model
-county_growth_du <- sum(zones_land$Tot_DU_45)-sum(area_weighted_corridor_results_DU$Tot_DU_20)
-corridor_du_growth_model <- area_weighted_corridor_results_DU$Tot_DU_45-area_weighted_corridor_results_DU$Tot_DU_20
-
-growth_scenarios_du[2,1] <- county_growth_du - corridor_du_growth_model
-growth_scenarios_du[2,2] <- "outside corridor" 
-growth_scenarios_du[2,3] <- "model scenario" 
-
-#growth of corridor to hit target
-corridor_growth_du_target_scenario <- (area_weighted_corridor_results_DU$acres*7)-(area_weighted_corridor_results_DU$Tot_DU_20)
-
-growth_scenarios_du[3,1] <- corridor_growth_du_target_scenario
-growth_scenarios_du[3,2] <- "inside corridor" 
-growth_scenarios_du[3,3] <- "target scenario" 
-
-growth_scenarios_du[4,1] <- (county_growth_du - corridor_growth_du_target_scenario)
-growth_scenarios_du[4,2] <- "outside corridor" 
-growth_scenarios_du[4,3] <- "target scenario" 
-
-colnames(growth_scenarios_du) <- c("du", "area", "scenario")
-
-gg_du_growth <- ggplot(data=growth_scenarios_du, aes(x=scenario, y=du, fill=area)) +
+gg_du_growth <- ggplot(data=filter(area_weighted_summary_wider, type == "du"), aes(x=scenario, y=growth, fill=area)) +
   geom_bar(stat="identity") +
   scale_fill_rpg(palette = "rpg_colors") +
   xlab("") +
-  ylab("DU Growth") +
-  ggtitle("DU Growth by Scenario") +
+  ylab("Dwelling Unit Growth") +
+  ggtitle("Dwelling Unit Growth by Scenario") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 10))
+
 
 grid.arrange(gg_emp_growth, gg_du_growth, ncol=2)
 
