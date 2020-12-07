@@ -25,7 +25,10 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -34,7 +37,7 @@
   div.column{display: inline-block; vertical-align: top; width: 50%;}
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
-      </style>
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -370,6 +373,9 @@ div.tocify {
 <li>
   <a href="regional_share.html">Scenario Regional Share Analysis</a>
 </li>
+<li>
+  <a href="far_qc.html">FAR QC</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -407,11 +413,11 @@ div.tocify {
 <h2>TOD Scenario Density Increase Over Trend Scenario per Station Area</h2>
 <div id="dwelling-unit-difference-per-5-year-increment" class="section level3">
 <h3>Dwelling Unit Difference Per 5-Year Increment</h3>
-<p><img src="corridor_station_area_growth_files/figure-html/unnamed-chunk-2-1.png" width="768" /></p>
+<p><img src="corridor_station_area_growth_files/figure-html/unnamed-chunk-45-1.png" width="768" /></p>
 </div>
 <div id="employment-difference-per-5-year-increment" class="section level3">
 <h3>Employment Difference Per 5-Year Increment</h3>
-<p><img src="corridor_station_area_growth_files/figure-html/unnamed-chunk-3-1.png" width="768" /></p>
+<p><img src="corridor_station_area_growth_files/figure-html/unnamed-chunk-46-1.png" width="768" /></p>
 </div>
 <div id="table-of-dwelling-unit-density-values-by-station-area" class="section level3">
 <h3>Table of Dwelling Unit Density Values by Station Area</h3>
@@ -1886,7 +1892,7 @@ North Massachussetts Ave.
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
