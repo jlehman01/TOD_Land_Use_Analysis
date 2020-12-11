@@ -83,3 +83,5 @@ grid.arrange(gg_emp_growth, gg_du_growth, ncol=2)
 
 
 ```
+
+**Note: This analysis assumes new DU and EMP allocated to corridor TAZs are equally spread by area, meaning the corridor estimate may be slightly lower than if all of these units were allocated only within the corridor portion of the TAZ.**
