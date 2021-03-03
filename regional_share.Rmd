@@ -52,7 +52,8 @@ The following charts reveal the distribution of forecasted dwelling unit and emp
 
 ```{r calculate growth for each category}
 
-area_weighted_summary_wider <- corridor_area_weighted_combined %>% pivot_wider(names_from = year, values_from = count, names_prefix = "yr_") %>% 
+area_weighted_summary_wider <- corridor_area_weighted_combined %>% pivot_wider(names_from = year, 
+                                                                               values_from = count, names_prefix = "yr_") %>% 
   mutate(growth = yr_2045-yr_2020)
 
 ```
